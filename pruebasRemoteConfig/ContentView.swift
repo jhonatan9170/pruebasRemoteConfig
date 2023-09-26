@@ -8,19 +8,43 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var managerConfig: ManaganerCofig
+    @State private var maintenance: Bool = false
+    @State private var forceUpdate: Bool = false
+    @State var optionalUpdate = false
+    
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            if managerConfig.config.mantenimiento.enable {
+                GSEktBrokenAppView(generalConfig: managerConfig.config)
+            } else if forceUpdate {
+                //GSEKTForceUpdateView(generalConfig: managerConfig.config)
+            } else {
+                //GSEKTMainNavView()
+                Text("Home")
+            }
+            
         }
-        .padding()
+        .onAppear(perform: {
+            //maintenance = generalConfig.mantenimiento.enable
+           // forceUpdate = generalConfig.actualizacionGlobal()
+        })
+        
     }
+    
+    /*func showMaintenanceView()  -> Bool{
+        return maintenance
+    }
+    
+    func showUpdateView()  -> Bool{
+        return forceUpdate
+    }*/
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+    
 }
