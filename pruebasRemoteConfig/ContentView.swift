@@ -9,28 +9,29 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var managerConfig: ManaganerCofig
-    @State private var maintenance: Bool = false
-    @State private var forceUpdate: Bool = false
-    @State var optionalUpdate = false
-    
+    private var maintenance: Bool { managerConfig.config.mantenimiento.enable}
+    private var forceUpdate: Bool { managerConfig.config.actualizacion}
+    //private var optionalUpdate: Bool { managerConfig.config.actualizacion_opcional}
     
     var body: some View {
+        
+        
         VStack {
-            if managerConfig.config.mantenimiento.enable {
+            if maintenance {
                 GSEktBrokenAppView(generalConfig: managerConfig.config)
             } else if forceUpdate {
-                //GSEKTForceUpdateView(generalConfig: managerConfig.config)
+                GSEKTForceUpdateView(generalConfig: managerConfig.config)
             } else {
                 //GSEKTMainNavView()
+                
+                if managerConfig.optionalUpdate {
+                    AlertCustom(style: .info, title: "", message: "Tu App Elektra tiene novedades para ti. Actualízala para no perdértelas. Actualizar mi App.", tap2AppStore: true , systemImage: "iconInfo", showingAlert: $managerConfig.optionalUpdate, textColor: .alertSuccessText, isImage: true)
+                   
+                }
                 Text("Home")
             }
-            
+          
         }
-        .onAppear(perform: {
-            //maintenance = generalConfig.mantenimiento.enable
-           // forceUpdate = generalConfig.actualizacionGlobal()
-        })
-        
     }
     
     /*func showMaintenanceView()  -> Bool{

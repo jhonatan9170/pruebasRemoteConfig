@@ -52,4 +52,17 @@ class RemoteConfigManager {
         rcmanager.RcfetchRemoteConfig(exprationDuration: 0.0)
 #endif
     }
+    
+    static func listener(completion: @escaping() -> Void) {
+        RemoteConfig.remoteConfig().addOnConfigUpdateListener { configUpdate, error in
+          guard let configUpdate, error == nil else {
+            print("Error listening for config updates: \(error)")
+              return
+          }
+            RemoteConfig.remoteConfig().activate { changed, error in
+            guard error == nil else { return }
+               completion()
+          }
+        }
+    }
 }

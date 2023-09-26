@@ -10,12 +10,23 @@ import Foundation
 class ManaganerCofig: ObservableObject {
     
     @Published var config: GeneralConfig = GeneralConfig()
-
+    @Published var optionalUpdate: Bool = false
+    
     func loadParameters(){
         
         let currentAmbient = String(describing: "PROD")
         let currentBuild = RemoteConfigKey.build //EktDeviceMobile.getBuildAppEkt()
         let configs = GSEktRCHelper.loadGeneralConfig()
+        GSEktRCHelper.listenerLoad(){[weak self] configs in
+            if let config = configs.first{$0.build == currentBuild}{
+                DispatchQueue.main.async {
+                    self?.config = config
+                    self?.optionalUpdate = config.actualizacion_opcional
+                    
+                }
+                
+            }
+        }
         
         //config = configs.first{$0.build == currentBuild}
         
@@ -26,7 +37,8 @@ class ManaganerCofig: ObservableObject {
         guard let config = configs.first(where: { $0.build == currentBuild }) else {
                     return
                 }
-        
+        self.config = config
+        self.optionalUpdate = config.actualizacion_opcional
         /*if let config = configs.first{$0.build == currentBuild}{
             self.config = config
         }*/

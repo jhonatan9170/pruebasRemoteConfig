@@ -34,6 +34,20 @@ final class GSEktRCHelper {
         return configs
     }
     
+    static func listenerLoad(completion: @escaping ([GeneralConfig]) -> Void) {
+        RemoteConfigManager.listener(){
+          
+            let decoder = JSONDecoder()
+            let data = RemoteConfigManager.rcValueString(forKey: RemoteConfigKey.generalConfigTest)
+            let jsonData = Data(data.utf8)
+            
+            if let configuraciones = try? decoder.decode(GeneralConfigs.self, from: jsonData) {
+                
+                completion(configuraciones.params)
+            }
+        }
+    }
+    
     static func loadSplashConfig() -> SplashParameters {
         var configs = SplashParameters()
         let data = RemoteConfigManager.rcValueString(forKey: RemoteConfigKey.splashParameters)
@@ -48,6 +62,8 @@ final class GSEktRCHelper {
         
         return configs
     }
+    
+    
     
     static func validateUpdateVersionApp() -> Bool {
         var validate = false
