@@ -28,13 +28,8 @@ class RemoteConfigManager {
     }
     
     private func RcfetchRemoteConfig(exprationDuration: TimeInterval) {
-        
-        var expirationDuration = 0.0
-        
         RemoteConfig.remoteConfig().fetch(withExpirationDuration: exprationDuration) { [weak self] status, err in
-            if let error = err {
-                return
-            }
+            guard err == nil else {return}
             if status == .success {
                 RemoteConfig.remoteConfig().activate()
             }
@@ -53,16 +48,12 @@ class RemoteConfigManager {
 #endif
     }
     
-    static func listener(completion: @escaping() -> Void) {
+    static func listener(forKey key:String, completion: @escaping (String) -> Void) {
         RemoteConfig.remoteConfig().addOnConfigUpdateListener { configUpdate, error in
-          guard let configUpdate, error == nil else {
-            print("Error listening for config updates: \(error)")
-              return
-          }
-            RemoteConfig.remoteConfig().activate { changed, error in
-            guard error == nil else { return }
-               completion()
-          }
+            guard error == nil else {return}
+            RemoteConfig.remoteConfig().activate()
+            let response = RemoteConfig.remoteConfig().configValue(forKey: key).stringValue!
+            completion(response)
         }
     }
 }

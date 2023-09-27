@@ -35,10 +35,9 @@ final class GSEktRCHelper {
     }
     
     static func listenerLoad(completion: @escaping ([GeneralConfig]) -> Void) {
-        RemoteConfigManager.listener(){
+        RemoteConfigManager.listener(forKey: RemoteConfigKey.generalConfigTest){ data in
           
             let decoder = JSONDecoder()
-            let data = RemoteConfigManager.rcValueString(forKey: RemoteConfigKey.generalConfigTest)
             let jsonData = Data(data.utf8)
             
             if let configuraciones = try? decoder.decode(GeneralConfigs.self, from: jsonData) {
