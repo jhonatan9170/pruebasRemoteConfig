@@ -9,17 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var managerConfig: ManaganerCofig
-    private var maintenance: Bool { managerConfig.config.mantenimiento.enable}
-    private var forceUpdate: Bool { managerConfig.config.actualizacion}
-    //private var optionalUpdate: Bool { managerConfig.config.actualizacion_opcional}
     
     var body: some View {
         
         
         VStack {
-            if maintenance {
+            if managerConfig.maintance {
                 GSEktBrokenAppView(generalConfig: managerConfig.config)
-            } else if forceUpdate {
+            } else if managerConfig.forceUpdate {
                 GSEKTForceUpdateView(generalConfig: managerConfig.config)
             } else {
                 //GSEKTMainNavView()
@@ -33,14 +30,6 @@ struct ContentView: View {
           
         }
     }
-    
-    /*func showMaintenanceView()  -> Bool{
-        return maintenance
-    }
-    
-    func showUpdateView()  -> Bool{
-        return forceUpdate
-    }*/
 }
 
 struct ContentView_Previews: PreviewProvider {

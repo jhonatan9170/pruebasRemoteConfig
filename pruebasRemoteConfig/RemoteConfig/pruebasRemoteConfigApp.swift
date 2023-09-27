@@ -17,9 +17,9 @@ struct pruebasRemoteConfigApp: App {
         var body: some Scene {
             WindowGroup {
                 ContentView()
-                    .onAppear(){
-                        //_ = generalConfig.getDataRC()
+                    .task {
                         managerConfig.loadParameters()
+                        managerConfig.setListener()
                     }
                     .environmentObject(managerConfig)
             }

@@ -42,7 +42,6 @@ final class GSEktRCHelper {
             let jsonData = Data(data.utf8)
             
             if let configuraciones = try? decoder.decode(GeneralConfigs.self, from: jsonData) {
-                
                 completion(configuraciones.params)
             }
         }

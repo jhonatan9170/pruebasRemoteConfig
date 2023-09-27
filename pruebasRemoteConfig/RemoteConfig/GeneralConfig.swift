@@ -11,37 +11,37 @@ class ManaganerCofig: ObservableObject {
     
     @Published var config: GeneralConfig = GeneralConfig()
     @Published var optionalUpdate: Bool = false
+    @Published var forceUpdate: Bool = false
+    @Published var maintance: Bool = false
     
     func loadParameters(){
         
-        let currentAmbient = String(describing: "PROD")
         let currentBuild = RemoteConfigKey.build //EktDeviceMobile.getBuildAppEkt()
         let configs = GSEktRCHelper.loadGeneralConfig()
-        GSEktRCHelper.listenerLoad(){[weak self] configs in
-            if let config = configs.first{$0.build == currentBuild}{
-                DispatchQueue.main.async {
-                    self?.config = config
-                    self?.optionalUpdate = config.actualizacion_opcional
-                    
-                }
-                
-            }
-        }
-        
-        //config = configs.first{$0.build == currentBuild}
-        
-        /*guard let config = configs.first{$0.build == currentBuild} else {
-            return
-        }*/
         
         guard let config = configs.first(where: { $0.build == currentBuild }) else {
-                    return
-                }
-        self.config = config
-        self.optionalUpdate = config.actualizacion_opcional
-        /*if let config = configs.first{$0.build == currentBuild}{
+            return
+        }
+        setParameters(config: config)
+    }
+    
+    func setListener(){
+        let currentBuild = RemoteConfigKey.build //EktDeviceMobile.getBuildAppEkt()
+        GSEktRCHelper.listenerLoad(){[weak self] configs in
+            guard let config = configs.first(where: { $0.build == currentBuild })  else {
+                return
+            }
+            self?.setParameters(config: config)
+        }
+    }
+    
+    private func setParameters(config: GeneralConfig) {
+        DispatchQueue.main.async {
             self.config = config
-        }*/
+            self.maintance = config.mantenimiento.enable
+            self.optionalUpdate = config.actualizacion_opcional
+            self.forceUpdate = config.actualizacion
+        }
     }
 }
 
