@@ -6,6 +6,7 @@
 import Foundation
 import Firebase
 
+
 class RemoteConfigManager {
     
     static func rcValueString(forKey key: String, exprationDuration: TimeInterval = 43200.0) -> String {
@@ -42,6 +43,7 @@ class RemoteConfigManager {
 #if STAGING || DEBUG
         //rcmanager.RcfetchRemoteConfig(exprationDuration: 10800) //TODO: - verificar valor...
         rcmanager.RcfetchRemoteConfig(exprationDuration: 0.0)
+        
 #else
         //rcmanager.RcfetchRemoteConfig(exprationDuration: exprationDuration)
         rcmanager.RcfetchRemoteConfig(exprationDuration: 0.0)
