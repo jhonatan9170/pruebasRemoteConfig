@@ -42,6 +42,7 @@ class RemoteConfigManager {
 #if STAGING || DEBUG
         //rcmanager.RcfetchRemoteConfig(exprationDuration: 10800) //TODO: - verificar valor...
         rcmanager.RcfetchRemoteConfig(exprationDuration: 0.0)
+        
 #else
         //rcmanager.RcfetchRemoteConfig(exprationDuration: exprationDuration)
         rcmanager.RcfetchRemoteConfig(exprationDuration: 0.0)
